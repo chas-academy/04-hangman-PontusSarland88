@@ -10,8 +10,8 @@ var msgElem; // Ger meddelande när spelet är över
 var startGameBtn; // Knappen du startar spelet med
 var letterButtons; // Knapparna för bokstäverna
 var startTime; // Mäter tiden
-var playerLife;
 var letterGuess;
+var correctGuessCounter; //Räknar antalet rätta gissningar
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd
 // Initiering av globala variabler samt koppling av funktioner till knapparna.
@@ -38,7 +38,8 @@ function getRandomWord(){
 
 // Funktionen som tar fram bokstävernas rutor, antal beror på vilket ord
 function generateBoxes(){
-    var displayUl = document.querySelector("#letterList");
+    letterBoxes = document.querySelector("#letterList");
+    removeLetterBoxes();    
     for (let i = 0; i < selectedWord.length; i++) {
         var li = document.createElement('li');          //Skapar ett nytt list element
         var input = document.createElement('input');    //Skapar ett nytt input element           
@@ -46,7 +47,7 @@ function generateBoxes(){
         input.setAttribute("disabled", "disabled");
         input.setAttribute("value", "");
         li.appendChild(input);                          //Lägger input elementet som en child till list elementet
-        displayUl.appendChild(li);                      //Skriver ut det nya elementet         
+        letterBoxes.appendChild(li);                      //Skriver ut det nya elementet         
     }
 }
 
@@ -54,21 +55,33 @@ function generateBoxes(){
 function checkGuess(letterGuess){
     disableLetter(letterGuess);                                         //Kallar på funktionen som "avaktiverar" bokstaven man gissat på
     var correctGuess = false;                                           //En bool som håller koll på om man gissat rätt
-    var childNodes = document.getElementById("letterList").children;    //Hämta listan med boxar.
+    var childNodes = document.getElementById("letterList").children;    //Hämta listan där boxarna skall vara.
     for(let i = 0; i < selectedWord.length; i++){                       //Loopar genom ordet för att kolla om den gissade bokstaven finns med i det korrekte ordet.
         if(letterGuess.toLowerCase() == selectedWord[i]){   
-            correctGuess = true;                                        
+            correctGuess = true;
+            correctGuessCounter++;                                      
             childNodes[i].firstChild.setAttribute("value", letterGuess); //Skriver ut den gissade bokstaven i rätt box.
         }
     }
     if(correctGuess == false){
-        playerLife++;
+        hangmanImgNr++;
         createHangman();
+    }
+    if(hangmanImgNr == 6 ){
+        msgElem = "The Game is fucking over! You loose!";
+        gameOver();
+    }
+    if(correctGuessCounter == selectedWord.length){
+        msgElem = "You win! Good job!";
+        gameOver();
     }
 }
 
 // Funktionen ropas vid vinst eller förlust, gör olika saker beroende av det
-
+function gameOver(){
+    //setTimeout(function(){ alert("Hello"); }, 3000);
+    setTimeout(function(){ window.alert(msgElem); }, 500); 
+}
 // Funktion som inaktiverar/aktiverar bokstavsknapparna beroende på vilken del av spelet du är på
 function disableLetter(letterGuess){
     //TODO: Disable the guessed letter! Om gissningar är på max så aktiveras alla automatiskt eller så sker detta vid start av nytt spel.
@@ -82,15 +95,22 @@ function disableLetter(letterGuess){
 }
 
 function restartGame(){
-    playerLife = 0;
-    //En funktion som återställer allt.
+    hangmanImgNr = 0;
+    correctGuessCounter = 0;
 }
-function createHangman(){
-    debugger;
-    hangmanImg = document.querySelector("#hangman");
-    // var img = document.createElement("img");
-    // img.src = "images/h[playerLife].png";
-    
-    hangmanImg.setAttribute("src", "images/h"+playerLife+".png")
 
+//
+function removeLetterBoxes(){
+    var letterBoxesToRemove = letterBoxes.querySelectorAll("li");
+    if (letterBoxesToRemove.length > 0 || null) {
+        for(let i = 0; i < letterBoxesToRemove.length; i++){
+            let nodeToRemove = letterBoxesToRemove[i];
+            letterBoxes.removeChild(nodeToRemove);
+        }    
+    }
+}
+
+function createHangman(){
+    hangmanImg = document.querySelector("#hangman");    //hämtar img sektionen där hangman bilderna skall vara
+    hangmanImg.setAttribute("src", "images/h"+hangmanImgNr+".png")
 }
