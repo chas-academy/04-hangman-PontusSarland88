@@ -12,6 +12,10 @@ var letterButtons; // Knapparna för bokstäverna
 var startTime; // Mäter tiden
 var letterGuess;
 var correctGuessCounter; //Räknar antalet rätta gissningar
+var minutesLabel;
+var secondsLabel;
+
+var totalSeconds;
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd
 // Initiering av globala variabler samt koppling av funktioner till knapparna.
@@ -28,7 +32,9 @@ function startGameBtn(){
     restartGame();
     getRandomWord();
     generateBoxes();
-    document.getElementById("message").innerHTML = selectedWord;
+    createHangman();
+    document.getElementById("message").innerHTML = selectedWord; //TODO: Ta bort denna rad!
+    startTime = setInterval(startTimer, 1000);
 }
 
 // Funktion som slumpar fram ett ord
@@ -97,9 +103,22 @@ function disableLetter(letterGuess){
 function restartGame(){
     hangmanImgNr = 0;
     correctGuessCounter = 0;
+    resetLetterButtons();
+    totalSeconds = 0;
+    clearInterval(startTime);
 }
 
-//
+//Änrar så att alla knappar blir 'klickbara' igen.
+function resetLetterButtons(){
+    let allLetters = document.getElementsByClassName("btn btn--stripe");
+    for(let i = 0; i < allLetters.length; i++){
+        if(allLetters[i].disabled == true){
+            allLetters[i].disabled = false;
+        }
+    }    
+}
+
+//Tar bort alla boxar.
 function removeLetterBoxes(){
     var letterBoxesToRemove = letterBoxes.querySelectorAll("li");
     if (letterBoxesToRemove.length > 0 || null) {
@@ -109,8 +128,30 @@ function removeLetterBoxes(){
         }    
     }
 }
-
+//Skriver ut hangmanbilderna beroende på hur många fel man svarat.
 function createHangman(){
     hangmanImg = document.querySelector("#hangman");    //hämtar img sektionen där hangman bilderna skall vara
     hangmanImg.setAttribute("src", "images/h"+hangmanImgNr+".png")
+}
+
+function startTimer(){
+    minutesLabel = document.getElementById("minutes");
+    secondsLabel = document.getElementById("seconds");
+    if(hangmanImgNr != 6 && correctGuessCounter != selectedWord.length){
+        ++totalSeconds;
+        secondsLabel.innerHTML = setTimer(totalSeconds%60);
+        minutesLabel.innerHTML = setTimer(parseInt(totalSeconds/60));
+    }    
+}
+function setTimer(val)
+{
+    var valString = val + "";
+    if(valString.length < 2)
+    {
+        return "0" + valString;
+    }
+    else
+    {
+        return valString;
+    }
 }

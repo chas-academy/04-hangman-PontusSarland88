@@ -24,7 +24,7 @@
                 <li>Övriga regler</li>
             </ul>
         </article>
-        <button class="btn btn--stripe" type="button" id="startGameBtn">Starta spelet</button>
+        <button class="btn btn--stripe" type="button" id="startGameBtn">Starta spelet <label id="minutes">00</label>:<label id="seconds">00</label></button> 
         <section id="gameBoard">
             <ul id="letterButtons">
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="A">A</button></li>
@@ -60,12 +60,6 @@
             <section id="letterBoxes">
                 <!-- This is where the matched letters should appear, these should match the number of -->
                 <ul id="letterList">
-                    <!-- <li><input type="text" disabled value="C" /></li>
-                    <li><input type="text" disabled value="H" /></li>
-                    <li><input type="text" disabled value="A" /></li>
-                    <li><input type="text" disabled value="S" /></li>
-                    <li><input type="text" disabled value="&nbsp;"  /></li>
-                    <li><input type="text" disabled value="&nbsp;"  /></li> -->
                 </ul>
             </section>
             <img id="hangman" src="images/h0.png" alt="hangman">
