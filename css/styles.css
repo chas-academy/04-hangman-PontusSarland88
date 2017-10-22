@@ -90,7 +90,11 @@ footer {
 #startGameBtn {
   font-size: 1.5em;
 }
-
+.centerSection{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 #gameBoard {
   padding: 10px 0;
@@ -198,7 +202,7 @@ footer {
 }
 
 .btn--stripe:hover {
-  background-color: #666;
+  background-color: #969696;
   color: #fff;
   border-color: #000;
 }

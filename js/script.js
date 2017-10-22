@@ -8,21 +8,19 @@ var hangmanImg; //Bild som kommer vid fel svar
 var hangmanImgNr; // Vilken av bilderna som kommer upp beroende på hur många fel du gjort
 var msgElem; // Ger meddelande när spelet är över
 var startGameBtn; // Knappen du startar spelet med
-var letterButtons; // Knapparna för bokstäverna
 var startTime; // Mäter tiden
 var letterGuess;
 var correctGuessCounter; //Räknar antalet rätta gissningar
 var minutesLabel;
 var secondsLabel;
-
+var buttonColor = "#666";
 var totalSeconds;
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd
 // Initiering av globala variabler samt koppling av funktioner till knapparna.
 function init() {
+    disableButtons();
     document.querySelector("#startGameBtn").addEventListener('click', startGameBtn);
-    //document.querySelector("#letterButtons").addEventListener('click', checkGuess); //Dett behövs inte så länge jag använder OnClick på mina knappar.
-    
 } // End init
 
 window.onload = init; // Se till att init aktiveras då sidan är inladdad
@@ -33,7 +31,6 @@ function startGameBtn(){
     getRandomWord();
     generateBoxes();
     createHangman();
-    document.getElementById("message").innerHTML = selectedWord; //TODO: Ta bort denna rad!
     startTime = setInterval(startTimer, 1000);
 }
 
@@ -59,7 +56,6 @@ function generateBoxes(){
 
 // Funktion som körs när du trycker på bokstäverna och gissar bokstav
 function checkGuess(letterGuess){
-    disableLetter(letterGuess);                                         //Kallar på funktionen som "avaktiverar" bokstaven man gissat på
     var correctGuess = false;                                           //En bool som håller koll på om man gissat rätt
     var childNodes = document.getElementById("letterList").children;    //Hämta listan där boxarna skall vara.
     for(let i = 0; i < selectedWord.length; i++){                       //Loopar genom ordet för att kolla om den gissade bokstaven finns med i det korrekte ordet.
@@ -67,34 +63,37 @@ function checkGuess(letterGuess){
             correctGuess = true;
             correctGuessCounter++;                                      
             childNodes[i].firstChild.setAttribute("value", letterGuess); //Skriver ut den gissade bokstaven i rätt box.
+            disableLetter(letterGuess, "lightgreen");
         }
     }
+    
     if(correctGuess == false){
         hangmanImgNr++;
         createHangman();
+        disableLetter(letterGuess, buttonColor); //Kallar på funktionen som "avaktiverar" bokstaven man gissat på
     }
     if(hangmanImgNr == 6 ){
-        msgElem = "The Game is fucking over! You loose!";
+        msgElem = "Game over! Du förlorade, det rätta ordet var: " + selectedWord.toUpperCase();
         gameOver();
     }
     if(correctGuessCounter == selectedWord.length){
-        msgElem = "You win! Good job!";
+        msgElem = "Grattis du vann, bra jobbat!";
         gameOver();
     }
 }
 
-// Funktionen ropas vid vinst eller förlust, gör olika saker beroende av det
+// Funktionen ropas vid vinst eller förlust, meddelar spelaren om denne vunnit eller förlorat.
 function gameOver(){
-    //setTimeout(function(){ alert("Hello"); }, 3000);
+    disableButtons();
     setTimeout(function(){ window.alert(msgElem); }, 500); 
 }
 // Funktion som inaktiverar/aktiverar bokstavsknapparna beroende på vilken del av spelet du är på
-function disableLetter(letterGuess){
-    //TODO: Disable the guessed letter! Om gissningar är på max så aktiveras alla automatiskt eller så sker detta vid start av nytt spel.
+function disableLetter(letterGuess, buttonColor){
     let allLetters = document.getElementsByClassName("btn btn--stripe");
     for(let i = 0; i < allLetters.length; i++){
       if(allLetters[i].innerHTML == letterGuess){
           allLetters[i].disabled = true;
+          allLetters[i].style.backgroundColor = buttonColor;
           break; 
       }  
     };
@@ -105,15 +104,23 @@ function restartGame(){
     correctGuessCounter = 0;
     resetLetterButtons();
     totalSeconds = 0;
-    clearInterval(startTime);
+    clearInterval(startTime); 
+}
+//Gör alla bokstäver icke klickbara
+function disableButtons(){
+    let allLetters = document.getElementsByClassName("btn btn--stripe");
+    for (let i = 1; i < allLetters.length; i++) {
+        allLetters[i].disabled = true;
+    }
 }
 
-//Änrar så att alla knappar blir 'klickbara' igen.
+//Gör så att alla knappar blir klickbara igen.
 function resetLetterButtons(){
     let allLetters = document.getElementsByClassName("btn btn--stripe");
     for(let i = 0; i < allLetters.length; i++){
         if(allLetters[i].disabled == true){
             allLetters[i].disabled = false;
+            allLetters[i].removeAttribute("style");
         }
     }    
 }
