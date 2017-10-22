@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hangman</title>
+    <title>Hänga gubbe</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script type="text/javascript" src="js/script.js"></script>
 </head>
 
 <body>
     <header>
-        <h1>Uppgift 05 - Hangman</h1>
+        <h1>Pontus - Hänga gubbe</h1>
     </header>
     <main>
         <article>
@@ -18,14 +18,17 @@
             <p>När du trycker på starta spelet, kommer datorn att välja ett ord slumpmässigt. <br/>
                Det kommer då dyka upp ett visst antal fält som motsvarar antalet bokstäver i ordet. <br/> 
                Ditt mål är att gissa ordet genom att trycka på bokstavsknapparna.<br/>
-               För varje bokstav du gissar rätt, så fylls dyker det upp en bokstav i på den plats som bokstaven du gissade på motsvarar i ordet.
+               För varje bokstav du gissar rätt, så dyker den rätta bokstaven upp och du får fortsätta gissa.
             </p>
             <ul>
                 <li>Övriga regler</li>
             </ul>
         </article>
-        <button class="btn btn--stripe" type="button" id="startGameBtn">Starta spelet</button>
-        <section id="gameBoard">
+        <section class="centerSection">
+                <button class="btn btn--stripe" type="button" id="startGameBtn">Starta nytt spel <label id="minutes">00</label>:<label id="seconds">00</label></button> 
+                <img id="hangman" src="images/h0.png" alt="hangman">
+        </section>        
+        <section id="gameBoard">                
             <ul id="letterButtons">
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="A">A</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="B">B</button></li>
@@ -46,7 +49,7 @@
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="Q">Q</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="R">R</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="S">S</button></li>
-                <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="T" disabled>T</button></li>
+                <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="T">T</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="U">U</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="V">V</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="W">W</button></li>
@@ -57,25 +60,15 @@
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="Ä">Ä</button></li>
                 <li><button class="btn btn--stripe" type="button" onclick="checkGuess(this.value)" value="Ö">Ö</button></li>
             </ul>
-            <section id="letterBoxes">
+            <section id="letterBoxes" class="centerSection">
                 <!-- This is where the matched letters should appear, these should match the number of -->
                 <ul id="letterList">
-                    <!-- <li><input type="text" disabled value="C" /></li>
-                    <li><input type="text" disabled value="H" /></li>
-                    <li><input type="text" disabled value="A" /></li>
-                    <li><input type="text" disabled value="S" /></li>
-                    <li><input type="text" disabled value="&nbsp;"  /></li>
-                    <li><input type="text" disabled value="&nbsp;"  /></li> -->
                 </ul>
             </section>
-            <img id="hangman" src="images/h0.png" alt="hangman">
-        </section>
-        <section id="message">
-            <!-- This is where messages should appear -->
         </section>
     </main>
     <footer>
-        Chas Academy - Hangman
+        Chas Academy - Pontus Hangman
     </footer>
 </body>
 
